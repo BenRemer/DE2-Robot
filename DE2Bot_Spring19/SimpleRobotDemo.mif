@@ -87,7 +87,7 @@ CONTENT
            04A : 083A;  -- 	LOAD	timerCount
            04B : 6801;  -- 	ADDI	1
            04C : 103A;  -- 	STORE 	timerCount
-           04D : 6FCE;  -- 	ADDI	-50
+           04D : 6FF6;  -- 	ADDI	-10
            04E : 3045;  -- 	JNEG	timerSkip
            04F : 8084;  -- 	CALL 	checkFinish
            050 : B000;  -- 	RETI
@@ -112,7 +112,7 @@ CONTENT
            063 : 103B;  -- 	STORE 	hasTurned
            064 : 0A12;  -- 	LOAD	Zero
            065 : 103A;  -- 	STORE	timerCount
-           066 : 8800;  -- 	RETURN
+           066 : B000;  -- 	RETI
            067 : 083B;  -- 	LOAD 	hasTurned	; if 0 skip
            068 : 4076;  -- 	JZERO	ReverseEnd
            069 : B802;  -- 	LOADI	2
@@ -128,7 +128,7 @@ CONTENT
            073 : 103C;  -- 	STORE	hasReversed
            074 : 0A26;  -- 	LOAD	Mask56 		; Loads sonar 2 and 3 and 5 and 6 and 7
            075 : 98B2;  -- 	OUT 	SONAREN
-           076 : 8800;  -- 	RETURN
+           076 : B000;  -- 	RETI
            077 : B803;  -- 	LOADI	3
            078 : 9805;  -- 	OUT		SSEG2
            079 : 90AE;  -- 	IN		DIST6		; loads sensor 7
@@ -141,7 +141,7 @@ CONTENT
            080 : 0A12;  -- 	LOAD	Zero		; reset hasTurned
            081 : 103B;  -- 	STORE	hasTurned
            082 : 103A;  -- 	STORE	timerCount
-           083 : 8800;  -- 	RETURN
+           083 : B000;  -- 	RETI
            084 : B804;  -- 	LOADI	4
            085 : 9805;  -- 	OUT		SSEG2
            086 : 90AE;  -- 	IN		DIST6		; load sensor 6
@@ -156,7 +156,7 @@ CONTENT
            08F : 103C;  -- 	STORE	hasReversed
            090 : 0A25;  -- 	LOAD	Mask23 		; Loads sonar 2 and 3 and 5 and 6 and 7
            091 : 98B2;  -- 	OUT 	SONAREN
-           092 : 8800;  -- 	RETURN
+           092 : B000;  -- 	RETI
            093 : 0000;  -- DTheta:    DW 0
            094 : 0000;  -- DVel:      DW 0
            095 : B832;  -- 	LOADI  50          ; used for the CapValue subroutine

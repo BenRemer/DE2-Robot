@@ -153,7 +153,7 @@ lastLeg:
 	ADDI	1
 	STORE 	timerCount
 	;LOAD	timerCount
-	ADDI	-50
+	ADDI	-10
 	JNEG	timerSkip
 	CALL 	checkFinish
 	RETI
@@ -185,7 +185,7 @@ WallTurn:
 	STORE	timerCount
 	;LOAD	Mask3 		; Loads sonar 2 and 3 and 5 and 6 and 7
 	;OUT 	SONAREN
-	RETURN
+	RETI
 	
 CheckReverse:
 	LOAD 	hasTurned	; if 0 skip
@@ -204,7 +204,7 @@ CheckReverse:
 	LOAD	Mask56 		; Loads sonar 2 and 3 and 5 and 6 and 7
 	OUT 	SONAREN
 ReverseEnd:
-	RETURN
+	RETI
 
 ReverseTurn:
 	LOADI	3
@@ -220,7 +220,7 @@ ReverseTurn:
 	STORE	hasTurned
 	STORE	timerCount
 rTurnSkip:
-	RETURN
+	RETI
 	
 checkFinish:
 	LOADI	4
@@ -237,7 +237,7 @@ checkFinish:
 	STORE	hasReversed
 	LOAD	Mask23 		; Loads sonar 2 and 3 and 5 and 6 and 7
 	OUT 	SONAREN
-	RETURN
+	RETI
 
 ;********************************************************
 	
