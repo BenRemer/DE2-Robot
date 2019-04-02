@@ -1,5 +1,5 @@
 Classic Timing Analyzer report for DE2Bot
-Tue Mar 26 14:06:19 2019
+Tue Apr 02 13:48:19 2019
 Quartus II Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Web Edition
 
 
@@ -2587,7 +2587,7 @@ Parallel compilation was disabled, but you have multiple processors available. E
 Info: *******************************************************************
 Info: Running Quartus II Classic Timing Analyzer
     Info: Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Web Edition
-    Info: Processing started: Tue Mar 26 14:06:14 2019
+    Info: Processing started: Tue Apr 02 13:48:15 2019
 Info: Command: quartus_tan --read_settings_files=off --write_settings_files=off DE2Bot -c DE2Bot --timing_analysis_only
 Warning: Timing Analysis is analyzing one or more combinational loops as latches
     Warning: Node "VEL_CONTROL:inst51|WATCHDOG_INT[4]~latch" is a latch
@@ -3409,8 +3409,8 @@ Info: th for register "DIG_IN:inst5|B_DI[1]" (data pin = "SW[1]", clock pin = "C
 Critical Warning: Timing requirements for slow timing model timing analysis were not met. See Report window for details.
 Info: Quartus II Classic Timing Analyzer was successful. 0 errors, 29 warnings
     Info: Peak virtual memory: 240 megabytes
-    Info: Processing ended: Tue Mar 26 14:06:20 2019
-    Info: Elapsed time: 00:00:06
-    Info: Total CPU time (on all processors): 00:00:06
+    Info: Processing ended: Tue Apr 02 13:48:20 2019
+    Info: Elapsed time: 00:00:05
+    Info: Total CPU time (on all processors): 00:00:05
 
 
