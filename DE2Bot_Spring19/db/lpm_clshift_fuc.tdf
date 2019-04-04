@@ -1,5 +1,5 @@
 --lpm_clshift CBX_DECLARE_ALL_CONNECTED_PORTS="OFF" LPM_SHIFTTYPE="ARITHMETIC" LPM_WIDTH=16 LPM_WIDTHDIST=4 data direction distance result
---VERSION_BEGIN 9.1SP2 cbx_lpm_clshift 2010:03:24:20:43:43:SJ cbx_mgl 2010:03:24:21:01:05:SJ  VERSION_END
+--VERSION_BEGIN 9.1SP2 cbx_lpm_clshift 2010:03:24:20:38:24:SJ cbx_mgl 2010:03:24:21:00:10:SJ  VERSION_END
 
 
 -- Copyright (C) 1991-2010 Altera Corporation

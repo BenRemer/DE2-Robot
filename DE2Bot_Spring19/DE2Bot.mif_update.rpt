@@ -1,6 +1,6 @@
 MIF/HEX Update report for DE2Bot
-Tue Apr 02 14:23:11 2019
-Quartus II Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Web Edition
+Thu Apr 04 13:00:59 2019
+Quartus II 64-Bit Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Full Version
 
 
 ---------------------
@@ -35,7 +35,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; MIF/HEX Update Summary                                        ;
 +-----------------------+---------------------------------------+
-; MIF/HEX Update Status ; Successful - Tue Apr 02 14:23:11 2019 ;
+; MIF/HEX Update Status ; Successful - Thu Apr 04 13:00:59 2019 ;
 ; Revision Name         ; DE2Bot                                ;
 ; Top-level Entity Name ; DE2bot                                ;
 ; Family                ; Cyclone II                            ;
@@ -43,25 +43,25 @@ applicable agreement for further details.
 +-----------------------+---------------------------------------+
 
 
-+------------------------------------------------------------------------------------------+
-; MIF/HEX Update Processed Files                                                           ;
-+------------------------------------------------------------------------------------------+
-; File Name                                                                                ;
-+------------------------------------------------------------------------------------------+
-; C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/SimpleRobotDemo.mif ;
-; C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/cos_table.mif       ;
-; C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/sin_table.mif       ;
-; C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/sound.mif           ;
-+------------------------------------------------------------------------------------------+
++---------------------------------------------------------------------------+
+; MIF/HEX Update Processed Files                                            ;
++---------------------------------------------------------------------------+
+; File Name                                                                 ;
++---------------------------------------------------------------------------+
+; C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/cos_table.mif       ;
+; C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/simplerobotdemo.mif ;
+; C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/sin_table.mif       ;
+; C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/sound.mif           ;
++---------------------------------------------------------------------------+
 
 
 +-------------------------+
 ; MIF/HEX Update Messages ;
 +-------------------------+
 Info: *******************************************************************
-Info: Running Quartus II MIF/HEX Update
-    Info: Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Web Edition
-    Info: Processing started: Tue Apr 02 14:23:10 2019
+Info: Running Quartus II 64-Bit MIF/HEX Update
+    Info: Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Full Version
+    Info: Processing started: Thu Apr 04 13:00:59 2019
 Info: Command: quartus_cdb DE2Bot -c DE2Bot --update_mif
 Warning: 573 out of 2048 addresses are reinitialized. The latest initialized data will replace the existing data. There are 573 warnings found, and 10 warnings are reported.
     Warning: Memory Initialization File address 0 is reinitialized
@@ -75,13 +75,13 @@ Warning: 573 out of 2048 addresses are reinitialized. The latest initialized dat
     Warning: Memory Initialization File address 8 is reinitialized
     Warning: Memory Initialization File address 9 is reinitialized
 Info: Processed the following Memory Initialization File(s)
-    Info: Processed Memory Initialization File C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/SimpleRobotDemo.mif
-    Info: Processed Memory Initialization File C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/cos_table.mif
-    Info: Processed Memory Initialization File C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/sin_table.mif
-    Info: Processed Memory Initialization File C:/Users/benar/OneDrive/Documents/School/DDL/Project/DE2Bot_Spring19/sound.mif
-Info: Quartus II MIF/HEX Update was successful. 0 errors, 11 warnings
-    Info: Peak virtual memory: 257 megabytes
-    Info: Processing ended: Tue Apr 02 14:23:11 2019
+    Info: Processed Memory Initialization File C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/cos_table.mif
+    Info: Processed Memory Initialization File C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/simplerobotdemo.mif
+    Info: Processed Memory Initialization File C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/sin_table.mif
+    Info: Processed Memory Initialization File C:/Users/cdyck6/Documents/DDL-Project/DE2Bot_Spring19/sound.mif
+Info: Quartus II 64-Bit MIF/HEX Update was successful. 0 errors, 11 warnings
+    Info: Peak virtual memory: 4476 megabytes
+    Info: Processing ended: Thu Apr 04 13:01:00 2019
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 

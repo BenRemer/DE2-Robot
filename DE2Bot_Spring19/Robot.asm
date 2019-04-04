@@ -147,10 +147,10 @@ CTimer_ISR:
 	forwardSub:
 		LOAD Zero
 		ADDI FAR_THRES1
-		STORE closeThres
+		STORE farThres
 		LOAD Zero
 		ADDI CLOSE_THRES1
-		STORE farThres
+		STORE closeThres
 		
 		CALL forwardCall
 		; Check if need to turn
@@ -159,17 +159,27 @@ CTimer_ISR:
 		IN 		DIST2		; load sensor 2
 		OUT		SSEG1
 		SUB		Ft3			; sub 3 foot in 1.04mm units
+		;OUT     LCD
 		JPOS	finish_isr
-		LOAD	turn90
+		;CALL turn90Call
+		IN		THETA		; get theta
+		ADDI  	90			; add 90 to turn cc
+		STORE  	DTheta      ; use API to get robot to face 90 degrees
+		;LOADI	1
+		;STORE 	hasTurned
+		;LOAD	Zero
+		;STORE	timerCount
+		LOAD	forward2Sub
 		STORE	currState
 		JUMP finish_isr
 	forward2Sub:
 		LOAD Zero
+		STORE DTHETA;
 		ADDI FAR_THRES2
-		STORE closeThres
+		STORE farThres
 		LOAD Zero
 		ADDI CLOSE_THRES2
-		STORE farThres
+		STORE closeThres
 		
 		CALL forwardCall
 		LOADI	2
@@ -185,17 +195,18 @@ CTimer_ISR:
 		;STORE	hasReversed
 		LOAD	Mask56 		; Loads sonar 5 and 6
 		OUT 	SONAREN
+		CALL    backwardCall
 		LOAD	backwardSub
 		STORE	currState
-		CALL	backwardCall
 		JUMP finish_isr
 	backwardSub:
 		LOAD Zero
-		ADDI FAR_THRES1
-		STORE closeThres
-		LOAD Zero
-		ADDI CLOSE_THRES1
+		STORE DTHETA
+		ADDI FAR_THRES2
 		STORE farThres
+		LOAD Zero
+		ADDI CLOSE_THRES2
+		STORE closeThres
 		
 		CALL backwardCall
 		LOADI	3
@@ -204,17 +215,21 @@ CTimer_ISR:
 		OUT		SSEG1
 		SUB		Ft2			; sub 2 feet
 		JPOS	finish_isr	; if positive skip
-		LOAD	turn0Sub
+		IN		THETA		; get theta
+		ADDI	-90			; set back to 0
+		STORE 	DTHETA		; store
+		LOAD	Zero		; reset hasTurned
+		LOAD	backward2Sub
 		STORE	currState
 		JUMP finish_isr
 	backward2Sub:
 		LOAD Zero
-		ADDI FAR_THRES2
-		STORE closeThres
-		LOAD Zero
-		ADDI CLOSE_THRES2
+		STORE DTHETA;
+		ADDI FAR_THRES1
 		STORE farThres
-		
+		LOAD Zero
+		ADDI CLOSE_THRES1
+		STORE closeThres
 		CALL backwardCall
 		LOADI	4
 		OUT		SSEG2
@@ -230,9 +245,9 @@ CTimer_ISR:
 		;STORE	hasReversed
 		LOAD	Mask235 		; Loads sonar 2 and 3 and 5
 		OUT 	SONAREN
+		CALL	forwardCall
 		LOAD	forwardSub
 		STORE	currState
-		CALL	forwardCall
 		JUMP finish_isr
 	turn0Sub:
 	    ;CALL turn0Call
@@ -333,7 +348,7 @@ HugWall:
 	OUT   LCD
 	JPOS  MoveTowards
 
-	JUMP endCase
+	JUMP resetTheta ;if it's on track, make it more forward again (prevents multiplying corrections)
 	 	
 	MoveAway:
 		
@@ -355,6 +370,11 @@ HugWall:
 			LOAD DTheta
 			SUB deltAngle ; TURN TOWARDS THE WALL
 			STORE DTheta
+		JUMP endCase
+		
+	resetTheta:
+		LOAD zero
+		STORE DTheta
 	endCase:
 	RETURN
 	
