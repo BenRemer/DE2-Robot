@@ -8,7 +8,7 @@
 ; The ISR jump table is located in mem 0-4.  See manual for details.
 ORG 0
 	JUMP   Init        ; Reset vector
-	RETI               ; Sonar interrupt (unused)
+	RETI	           ; Sonar interrupt (unused)
 	JUMP   CTimer_ISR  ; Timer interrupt
 	RETI               ; UART interrupt (unused)
 	RETI               ; Motor stall interrupt (unused)
@@ -19,17 +19,29 @@ ORG 0
 Init:
 	; Always a good idea to make sure the robot
 	; stops in the event of a reset.
-	LOAD   Zero
-	OUT    LVELCMD     ; Stop motors
-	OUT    RVELCMD
-	STORE  DVel        ; Reset API variables
-	STORE  DTheta
-	OUT    SONAREN     ; Disable sonar (optional)
-	OUT    BEEP        ; Stop any beeping (optional)
+	LOAD   	Zero
+	OUT    	LVELCMD     ; Stop motors
+	OUT    	RVELCMD
+	STORE  	DVel        ; Reset API variables
+	STORE  	DTheta
+	;OUT    SONAREN     ; Disable sonar (optional)
+	OUT    	BEEP        ; Stop any beeping (optional)
+	STORE	hasTurned
+	STORE	timerCount
+	STORE 	hasReversed
 	
 	CALL   SetupI2C    ; Configure the I2C to read the battery voltage
 	CALL   BattCheck   ; Get battery voltage (and end if too low).
 	OUT    LCD         ; Display battery voltage (hex, tenths of volts)
+	
+	LOAD	Mask23 ;3567	; Loads sonar 2 and 3 and 5 and 6 and 7
+	OUT 	SONAREN		; enable sonar 2 and 3 and 5 and 6 and 7
+	;OUT 	SONARINT	
+	LOAD	Zero
+	ADDI	&H131		; add 305mm (1 ft)
+	OUT 	SONALARM	; set threashold for sonar
+	
+	
 	
 WaitForSafety:
 	; This loop will wait for the user to toggle SW17.  Note that
@@ -74,18 +86,22 @@ Main:
 	; If you want to take manual control of the robot,
 	; execute CLI &B0010 to disable the timer interrupt.
 	
-	LOADI  90
-	STORE  DTheta      ; use API to get robot to face 90 degrees
-TurnLoop:
-	IN     Theta
-	ADDI   -90
-	CALL   Abs         ; get abs(currentAngle - 90)
-	ADDI   -3
-	JPOS   TurnLoop    ; if angle error > 3, keep checking
-	; at this point, robot should be within 3 degrees of 90
-	LOAD   FMid
-	STORE  DVel        ; use API to move forward
-
+	;LOADI  90
+	;STORE  DTheta      ; use API to get robot to face 90 degrees
+;TurnLoop:
+;	IN     Theta
+;	ADDI   -90
+;	CALL   Abs         ; get abs(currentAngle - 90)
+;	ADDI   -3
+;	JPOS   TurnLoop    ; if angle error > 3, keep checking
+;	; at this point, robot should be within 3 degrees of 90
+;	LOAD   FMid
+;	STORE  DVel        ; use API to move forward
+GoStright:
+	LOAD   	FFast
+	;OUT	LVELCMD
+	;OUT 	RVELCMD
+	STORE  	DVel        ; use API to move forward
 InfLoop: 
 	JUMP   InfLoop
 	; note that the movement API will still be running during this
@@ -112,10 +128,118 @@ Forever:
 
 ; Timer ISR.  Currently just calls the movement control code.
 ; You could, however, do additional tasks here if desired.
+
+timerCount:	DW	0
+hasTurned:	DW	0	; changed to 1 if bot has turned
+hasReversed:	DW	0
 CTimer_ISR:
-	CALL   ControlMovement
+	CALL   	ControlMovement
+	LOAD	hasReversed
+	JPOS	checkSkip
+	CALL   	FirstCheckIfTurn
+	LOAD	timerCount
+	ADDI	-10
+	JNEG	timerSkip
+	CALL	CheckReverse
+timerSkip:	
 	RETI   ; return from ISR
+checkSkip:
+	LOAD	hasTurned
+	JZERO	lastLeg
+	CALL	ReverseTurn
+	RETI	
+lastLeg:
+	LOAD	timerCount
+	ADDI	1
+	STORE 	timerCount
+	;LOAD	timerCount
+	ADDI	-10
+	JNEG	timerSkip
+	CALL 	checkFinish
+	RETI
 	
+;********************************************************
+distance: DW &H138
+FirstCheckIfTurn:
+	LOAD 	hasTurned
+	JPOS	CheckEnd	; if 1 skip
+	LOADI	1
+	OUT		SSEG2
+	IN 		DIST2		; load sensor 2
+	OUT		SSEG1
+	SUB		Ft3			; sub 3 foot in 1.04mm units
+	JNEG	WallTurn	; skip if still positive number
+	JZERO	WallTurn
+CheckEnd:
+	LOAD	timerCount
+	ADDI	1
+	STORE 	timerCount
+	RETURN			
+WallTurn:
+	IN		THETA		; get theta
+	ADDI  	90			; add 90 to turn cc
+	STORE  	DTheta      ; use API to get robot to face 90 degrees
+	LOADI	1
+	STORE 	hasTurned
+	LOAD	Zero
+	STORE	timerCount
+	;LOAD	Mask3 		; Loads sonar 2 and 3 and 5 and 6 and 7
+	;OUT 	SONAREN
+	RETI
+	
+CheckReverse:
+	LOAD 	hasTurned	; if 0 skip
+	JZERO	ReverseEnd
+	LOADI	2
+	OUT		SSEG2
+	IN		DIST3		; load sensor 3
+	OUT		SSEG1
+	SUB		Ft2			; sub 2 foot in 1.04mm units
+	JPOS	ReverseEnd  ; if pos skip
+	LOAD 	RFast		; reverse
+	STORE	DVel		; store
+	LOAD 	hasReversed
+	ADDI	1
+	STORE	hasReversed
+	LOAD	Mask56 		; Loads sonar 2 and 3 and 5 and 6 and 7
+	OUT 	SONAREN
+ReverseEnd:
+	RETI
+
+ReverseTurn:
+	LOADI	3
+	OUT		SSEG2
+	IN		DIST6		; loads sensor 7
+	OUT		SSEG1
+	SUB		Ft2			; sub 3 feet
+	JPOS	rTurnSkip	; if positive skip
+	IN		THETA		; get theta
+	ADDI	-90			; set back to 0
+	STORE 	DTHETA		; store
+	LOAD	Zero		; reset hasTurned
+	STORE	hasTurned
+	STORE	timerCount
+rTurnSkip:
+	RETI
+	
+checkFinish:
+	LOADI	4
+	OUT		SSEG2
+	IN		DIST6		; load sensor 6
+	OUT		SSEG1
+	SUB		Ft3			; sub 2 feet
+	JPOS	rTurnSkip	; if pos skip
+	LOAD	FFast		; go back forward
+	STORE	DVel		
+	LOAD	Zero		; reset back to 0's
+	STORE	hasTurned
+	STORE	timerCount
+	STORE	hasReversed
+	LOAD	Mask23 		; Loads sonar 2 and 3 and 5 and 6 and 7
+	OUT 	SONAREN
+	RETI
+
+;********************************************************
 	
 ; Control code.  If called repeatedly, this code will attempt
 ; to control the robot to face the angle specified in DTheta
@@ -663,6 +787,7 @@ I2CError:
 ;***************************************************************
 Temp:     DW 0 ; "Temp" is not a great name, but can be useful
 
+
 ;***************************************************************
 ;* Constants
 ;* (though there is nothing stopping you from writing to these)
@@ -691,12 +816,15 @@ Mask4:    DW &B00010000
 Mask5:    DW &B00100000
 Mask6:    DW &B01000000
 Mask7:    DW &B10000000
+Mask23:	  DW &B00001100
+Mask56:	  DW &B01100000
 LowByte:  DW &HFF      ; binary 00000000 1111111
 LowNibl:  DW &HF       ; 0000 0000 0000 1111
 
 ; some useful movement values
 OneMeter: DW 961       ; ~1m in 1.04mm units
 HalfMeter: DW 481      ; ~0.5m in 1.04mm units
+Ft1:	  DW 293	   ; ~1ft in 1.04mm units
 Ft2:      DW 586       ; ~2ft in 1.04mm units
 Ft3:      DW 879
 Ft4:      DW 1172
